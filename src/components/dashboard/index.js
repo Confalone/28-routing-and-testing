@@ -17,15 +17,17 @@ export default class Dashboard extends Component {
     this.removeNote = this.removeNote.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   addNote(note) {
-    note.preventDefault();
     note.id = uuidv1(),
     note.editing = false,
     note.completed = false,
     note.title = this.state.title,
     note.content = this.state.content,
+
+    console.log(note);
 
     this.setState({
       notes: [...this.state.notes, note],
@@ -46,13 +48,22 @@ export default class Dashboard extends Component {
       })
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    this.addNote(this.state);
+    this.setState({
+      title: '',
+      content: '',
+    })
+  }
+
   render() {
     console.log(this.state, 'state');
     return (
       <Fragment>
       <h1>Dashboard</h1>
       <NoteCreateForm 
-        onComplete={this.addNote}
+        onComplete={this.handleSubmit}
         handleContentChange={this.handleContentChange}
         handleTitleChange={this.handleTitleChange}
       />

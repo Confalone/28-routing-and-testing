@@ -1,9 +1,9 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import uuidv1 from 'uuid/v1';
 
 import NoteCreateForm from '../note-create-form';
 import NoteList from '../note-list';
-
+import NoteItem from '../note-item';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -11,8 +11,8 @@ export default class Dashboard extends Component {
     this.state = {
       notes: [],
       content: '',
-      title:'',
-    }
+      title: '',
+    };
     this.addNote = this.addNote.bind(this);
     this.removeNote = this.removeNote.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
@@ -31,21 +31,29 @@ export default class Dashboard extends Component {
 
     this.setState({
       notes: [...this.state.notes, note],
-    })
+    });
   }
 
   handleContentChange(event) {
-    this.setState({content: event.target.value});
+    this.setState({ content: event.target.value });
   }
 
   handleTitleChange(event) {
-    this.setState({title: event.target.value});
+    this.setState({ title: event.target.value });
   }
 
-  removeNote(note) {
+  removeNote(e) {
+    console.log('trying to remove note', this.state.notes);
+    let filteredNotes = this.state.notes.filter(note => {
+      if (e.target.id !== note.id) {
+        return note;
+      }
+    });
     this.setState({
-      notes: this.state.notes.filter(noteToDelete => noteToDelete.id !== note.id) 
-      })
+      notes: filteredNotes,
+    });
+    console.log(filteredNotes, 'filtered');
+    console.log(e.target.id, 'id');
   }
 
   handleSubmit(event) {
@@ -54,25 +62,28 @@ export default class Dashboard extends Component {
     this.setState({
       title: '',
       content: '',
-    })
+    });
   }
 
   render() {
     console.log(this.state, 'state');
     return (
       <Fragment>
-      <h1>Dashboard</h1>
-      <NoteCreateForm 
-        onComplete={this.handleSubmit}
-        handleContentChange={this.handleContentChange}
-        handleTitleChange={this.handleTitleChange}
-      />
-      <NoteList 
-        notes={this.state.notes}
-      />
+        <h1>Dashboard</h1>
+        <NoteCreateForm
+          onComplete={this.handleSubmit}
+          handleContentChange={this.handleContentChange}
+          handleTitleChange={this.handleTitleChange}
+        />
+        {/* {this.state.notes.length >0
+        && <NoteList notes={this.state.notes} onRemove={this.removeNote}
+        } */}
+        <NoteItem
+          notes={this.state.notes}
+          removeNote={this.removeNote}
+        />
+
       </Fragment>
     );
   }
-
-
 }

@@ -78,7 +78,7 @@ export default class Dashboard extends Component {
         {/* {this.state.notes.length >0
         && <NoteList notes={this.state.notes} onRemove={this.removeNote}
         } */}
-        <NoteItem
+        <NoteList
           notes={this.state.notes}
           removeNote={this.removeNote}
         />
